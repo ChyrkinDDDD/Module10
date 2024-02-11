@@ -27,8 +27,8 @@ public class Demo {
         }
 
     }
-    public static ArrayList<User> fillList(String[] dataFromFile){
-        ArrayList<User> result = new ArrayList<>();
+    public static List<User> fillList(String[] dataFromFile){
+        List<User> result = new ArrayList<>();
         for(int i = 2; i < dataFromFile.length; i+=2){
             String name = dataFromFile[i];
             int age = Integer.parseInt(dataFromFile[i+1]);
