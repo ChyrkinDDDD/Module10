@@ -3,10 +3,7 @@ package exercise3;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class CountWord {
     public static final String FILE_NAME = "words.txt";
@@ -16,30 +13,43 @@ public class CountWord {
 
     }
     public static String countWords(String[] words){
-        
-        List<String> list = new ArrayList<>();
-        for (var word : words) {
-            if(list.contains(word))continue;
 
-            list.add(word);
-        }
-        HashMap<Integer,String> hashMap = new HashMap<>();
+        Map<String, Integer> hashMap = new HashMap<>();
 
-        for (var word : list) {
+        for (int i = 0; i < words.length; i++) {
+            if(hashMap.containsKey(words[i]))
+                continue;
             int count = 0;
-            for (var value: words) {
-                if(word.equals(value))
+            for (int j = 0; j < words.length; j++) {
+                if(words[i].equals(words[j]))
                     count++;
             }
-            hashMap.put(count,word);
-        }
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = hashMap.size()-1; i >= 0; i--) {
-            stringBuilder.append(hashMap.values().toArray()[i]).append(" ")
-                    .append(hashMap.keySet().toArray()[i]).append("\n");
-        }
 
-        return stringBuilder.toString();
+            hashMap.put(words[i],count);
+        }
+        entriesSortedByValues(hashMap);
+
+        StringBuilder result = new StringBuilder();
+        for (var key : hashMap.keySet().toArray()) {
+            result.append(key).append(" ").append(hashMap.get(key)).append("\n");
+        }
+        return result.toString();
+    }
+    static <K,V extends Comparable<? super V>>
+    List<Map.Entry<K, V>> entriesSortedByValues(Map<K,V> map) {
+
+        List<Map.Entry<K,V>> sortedEntries = new ArrayList<Map.Entry<K,V>>(map.entrySet());
+
+        Collections.sort(sortedEntries,
+                new Comparator<Map.Entry<K,V>>() {
+                    @Override
+                    public int compare(Map.Entry<K,V> e1, Map.Entry<K,V> e2) {
+                        return e2.getValue().compareTo(e1.getValue());
+                    }
+                }
+        );
+
+        return sortedEntries;
     }
     public static String[] readFromFile(String fileName){
         try {
